@@ -1,0 +1,131 @@
+## libtimer
+
+### What is `libtimer`? What do we want it to do?
+
+`libtimer` provides convenient wrapper around `chrono` for timing
+computations using named timers.
+
+There are two components that we want from `libtimer`.
+
+1. A `Timer` class that represents a single named timer.
+2. A `TimerSet` class that represents a group of related timers.
+
+### Requirements for `Timer`
+
+A `Timer` should allow to set and retrieve the following:
+
+1. Name of the timer
+1. Whether it is running or not
+1. When was it last started
+1. When was it last stopped
+1. How many times (iterations) was the timer started (and stopped)
+1. What is total time that the timer was on
+1. What are the min, max, mean and std. dev. times that that timer was on
+1. What are the indices of the min and max indices
+1. Keep track of min and max and their indices only if requested.
+1. If needed, store the actual elapsed time of each iteration
+    1. For performance, ability to preallocate enough memory to store the
+       times
+1. Write a fixed format report to an `ostream`
+
+### Requirements for `TimerSet`
+
+A `TimerSet` should have:
+
+1. `Vector` to hold multiple timers by name
+1. Add and delete timers by name
+1. Start, stop and restart a given timer by name
+1. Start, stop and restart all timers
+1. Write a fixed format report of all the timers.
+
+
+### Requirements for reports
+
+Output of a Timer report (without details):
+
+```
+-------------------------------------------------------------------------------
+Timer            Count           Total             Mean             Std. Dev.
+-------------------------------------------------------------------------------
+Individual1000   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s
+-------------------------------------------------------------------------------
+```
+
+Output of a TimerSet report (without details):
+
+```
+-------------------------------------------------------------------------------
+Timer            Count           Total             Mean             Std. Dev.
+-------------------------------------------------------------------------------
+Individual1000   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s
+Individual1001   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s
+Individual1002   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s
+Individual1003   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s
+-------------------------------------------------------------------------------
+```
+
+Output of a Timer report (with details):
+
+```
+------------------------------------------------------------------------------------------------------------------------------------------------
+Timer            Count           Total             Mean             Std. Dev.    Minimum (Index)                  Maximum(Index)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Individual1000   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s  12h 23m 32.789s (1,000,000,000)  12h 23m 32.789s (1,000,000,000)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
+Output of a TimerSet report (with details):
+
+```
+------------------------------------------------------------------------------------------------------------------------------------------------
+Timer            Count           Total             Mean             Std. Dev.    Minimum (Index)                  Maximum(Index)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Individual1000   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s  12h 23m 32.789s (1,000,000,000)  12h 23m 32.789s (1,000,000,000)
+Individual1001   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s  12h 23m 32.789s (1,000,000,000)  12h 23m 32.789s (1,000,000,000)
+Individual1002   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s  12h 23m 32.789s (1,000,000,000)  12h 23m 32.789s (1,000,000,000)
+Individual1003   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s  12h 23m 32.789s (1,000,000,000)  12h 23m 32.789s (1,000,000,000)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
+### Example usage
+
+```
+int main(int argc, char** argv) {
+    // Create a TimerSet
+    Timer::TimerSet timers;
+
+    // Set TimerSet Options
+    timers.EnableOptions(Timer::MINMAX);
+
+    // Add Timers
+    timers.Add("i loop");
+    timers.Add("j loop");
+
+    // Start Timers
+    timers.Start("i loop");
+    timers.Start("j loop");
+    double temp;
+    for(int i = 0; i < 1000; i++) {
+        for(int j = 0; j < 1000; j++) {
+            temp = std::rand();
+            // Restart timer
+            timers.Restart("j loop");
+        }
+        timers.Restart("i loop");
+    }
+
+    // Stop all Timers
+    timers.StopAll();
+
+
+    // Write report to stdout
+    std::cout << timers << std::endl;
+
+    // Write report to file
+    std::ofstream file("timing.txt");
+    file << timers << std::endl;
+    file.close();
+
+    return 0;
+}
+```
