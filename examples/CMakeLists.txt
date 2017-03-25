@@ -4,5 +4,5 @@ include_directories(
 
 if(BUILD_EXAMPLES)
     add_executable(example_timer example_timer.cpp)
-    target_link_libraries(example_timer timer)
+    target_link_libraries(example_timer timey)
 endif()

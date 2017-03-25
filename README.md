@@ -1,3 +1,4 @@
-### libtimer
+### Timey
 
-`libtimer` is a timing and benchmark reporting library.
+`Timey` provides a convenient wrapper around `chrono` for timing computations
+using named timers.

@@ -10,6 +10,6 @@ Shivakar Vulli <svulli@shivakar.com>
 	* CMakeLists.txt
 	* examples/CMakeLists.txt
 	* src/CMakeLists.txt
-	* include/timer.hpp
+	* include/timey.hpp
 	* examples/timer.cpp
 	* src/timer.cpp

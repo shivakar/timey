@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "timer.hpp"
+#include "timey.hpp"
 
 int main(int argc, char *argv[]) {
 

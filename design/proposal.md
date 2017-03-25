@@ -1,11 +1,11 @@
-## libtimer
+## Timey
 
-### What is `libtimer`? What do we want it to do?
+### What is `Timey`? What do we want it to do?
 
-`libtimer` provides convenient wrapper around `chrono` for timing
+`Timey` provides convenient wrapper around `chrono` for timing
 computations using named timers.
 
-There are two components that we want from `libtimer`.
+There are two components that we want from `timey`.
 
 1. A `Timer` class that represents a single named timer.
 2. A `TimerSet` class that represents a group of related timers.
@@ -92,10 +92,10 @@ Individual1003   1,000,000,000   12h 23m 32.789s   12h 23m 32.789s  23m 32.789s 
 ```
 int main(int argc, char** argv) {
     // Create a TimerSet
-    Timer::TimerSet timers;
+    Timey::TimerSet timers;
 
     // Set TimerSet Options
-    timers.EnableOptions(Timer::MINMAX);
+    timers.EnableOptions(Timey::MINMAX);
 
     // Add Timers
     timers.Add("i loop");
