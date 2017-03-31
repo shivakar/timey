@@ -1,13 +1,23 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(timey)
 set(PROJECT_NAME "timey")
+set(PROJECT_VERSION "0.0.1")
+
+option(BUILD_EXAMPLES "Build examples." ON)
+option(BUILD_TESTS "Build tests." ON)
+option(ENABLE_CXX_STRICT "Enable strict compiler rules." OFF)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall -pedantic -Wextra")
+if(BUILD_STRICT)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+endif()
 
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install)
+# Set the default installation prefix to /opt/apps/timey/<version>
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /opt/apps/{PROJECT_NAME}/{PROJECT_VERSION})
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -18,6 +28,11 @@ install(
     COMPONENT headers
     )
 
-#add_subdirectory(src)
-#add_subdirectory(test)
-add_subdirectory(examples)
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()

@@ -23,19 +23,19 @@ class Timer {
     std::chrono::high_resolution_clock::time_point stopTime;
 };
 
-Timer::Timer() : running(false), count(0), totalTime(0){};
+Timer::Timer() : running(false), count(0), totalTime(0){}
 
 Timer::~Timer() {
     if (running) {
         std::cerr << "Destroying a running timer" << std::endl;
     }
-};
+}
 
 inline void Timer::Reset() {
     running = false;
     count = 0;
     totalTime = std::chrono::duration<double>::zero();
-};
+}
 
 inline void Timer::Start() {
     if (running) {
@@ -43,7 +43,7 @@ inline void Timer::Start() {
     }
     startTime = std::chrono::high_resolution_clock::now();
     running = true;
-};
+}
 
 inline void Timer::Stop() {
     if (!running) {
@@ -53,9 +53,9 @@ inline void Timer::Stop() {
     count++;
     totalTime = stopTime - startTime;
     running = false;
-};
+}
 
 inline std::chrono::duration<double> Timer::Elapsed() {
     return totalTime;
-};
+}
 }
