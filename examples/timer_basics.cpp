@@ -1,3 +1,7 @@
+/// @file timer_basics.cpp
+///
+/// Example demonstrating the basic usage of the Timer class.
+///
 #include <chrono>
 #include <iostream>
 #include <iostream>

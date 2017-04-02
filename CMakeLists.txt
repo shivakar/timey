@@ -6,6 +6,7 @@ set(PROJECT_VERSION "0.0.1")
 
 option(BUILD_EXAMPLES "Build examples." ON)
 option(BUILD_TESTS "Build tests." ON)
+option(BUILD_DOCUMENTATION "Build and install HTML documentation." ON)
 option(ENABLE_CXX_STRICT "Enable strict compiler rules." OFF)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -35,4 +36,8 @@ endif()
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
+endif()
+
+if (BUILD_DOCUMENTATION)
+    add_subdirectory(doc)
 endif()

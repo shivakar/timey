@@ -1,3 +1,7 @@
+/// @file timer.hpp
+///
+/// Timer class
+///
 #pragma once
 
 #include <chrono>
@@ -23,7 +27,7 @@ class Timer {
     std::chrono::high_resolution_clock::time_point stopTime;
 };
 
-Timer::Timer() : running(false), count(0), totalTime(0){}
+Timer::Timer() : running(false), count(0), totalTime(0) {}
 
 Timer::~Timer() {
     if (running) {
@@ -55,7 +59,5 @@ inline void Timer::Stop() {
     running = false;
 }
 
-inline std::chrono::duration<double> Timer::Elapsed() {
-    return totalTime;
-}
+inline std::chrono::duration<double> Timer::Elapsed() { return totalTime; }
 }

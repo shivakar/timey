@@ -38,6 +38,7 @@ TEST(TimeyTest, HumanizeDuration) {
             45 * timey::Minute + 12 * timey::Second + timey::Nanosecond,
             "45m12.000000001s"),
         std::make_pair(90 * timey::Minute, "1h30m"),
+        std::make_pair(2 * timey::Hour, "2h"),
         std::make_pair(100 * timey::Hour + 90 * timey::Minute +
                            5 * timey::Second + 5 * timey::Millisecond +
                            1 * timey::Microsecond + 4 * timey::Nanosecond,

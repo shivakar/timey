@@ -1,3 +1,7 @@
+/// @file utils.hpp
+///
+/// Utility functions for working with durations.
+///
 #pragma once
 
 #include <iomanip>
@@ -21,8 +25,18 @@ constexpr MinutesType Minute(1);
 constexpr HoursType Hour(1);
 constexpr SecondsType ZeroSeconds(0);
 
+/// Internal namespace for internal use only functions.
+///
 namespace internal {
-std::string DoubleToFixedString(double d) {
+
+/// DoubleToFixedString returns string representation of double 'd' without
+/// trailing zeros.
+///
+/// Where precision of d is <= 9
+///
+/// @param d double
+/// @return std::string
+std::string DoubleToFixedString(const double& d) {
     std::ostringstream out;
 
     out << std::fixed << std::setprecision(9) << d;
@@ -37,6 +51,30 @@ std::string DoubleToFixedString(double d) {
 }
 }
 
+/// Humanize returns a human readable string representation of a duration.
+///
+/// For durations less than a second, the string representation will be in
+/// milli, micro or nanoseconds, which ever is the highest scale to keep the
+/// value of the duration between 1 and 999.
+///
+/// E.g. 0.001s       = 1ms
+///      0.000001s    = 1us
+///      0.000000001s = 1ns
+///
+/// For durations greater than a second, the string representation will be in
+/// hours, minutes, and/or seconds.
+///
+/// E.g. 3665.005s = 1h1m5.005s
+///      7200s     = 1h
+///
+/// Maximum duration that can be formatted using the function is
+/// ((1<<63)-1) nanoseconds or 2562047h47m16.854775807s
+///
+/// Special cases are:
+///      0s        = 0s (even though 0ns would still be correct)
+///
+/// @param dur instance of the std::chrono::duration
+/// @return std::string
 template <class T1, class T2>
 std::string Humanize(const std::chrono::duration<T1, T2>& dur) {
     using std::chrono::duration_cast;
