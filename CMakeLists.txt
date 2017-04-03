@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timey)
 set(PROJECT_NAME "timey")
-set(PROJECT_VERSION "0.0.1")
+set(PROJECT_VERSION "0.0.2")
 
 option(BUILD_EXAMPLES "Build examples." ON)
 option(BUILD_TESTS "Build tests." ON)
 option(BUILD_DOCUMENTATION "Build and install HTML documentation." ON)
 option(ENABLE_CXX_STRICT "Enable strict compiler rules." OFF)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall -pedantic -Wextra")

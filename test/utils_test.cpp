@@ -1,5 +1,3 @@
-#include <chrono>
-
 #include "gtest/gtest.h"
 
 #include "timey.hpp"
@@ -21,7 +19,7 @@ TEST(TimeyInternalTest, DoubleToFixedString) {
     }
 }
 
-TEST(TimeyTest, HumanizeDuration) {
+TEST(TimeyUtilsTest, HumanizeDuration) {
     std::vector<std::pair<timey::NanosecondsType, std::string>> test_data = {
         std::make_pair(0 * timey::Second, "0s"),
         std::make_pair(1 * timey::Nanosecond, "1ns"),

@@ -4,60 +4,101 @@
 ///
 #pragma once
 
+#include <iostream>
+#include <stdexcept>
 #include <chrono>
+#include <cstdint>
+
+#include "utils.hpp"
 
 namespace timey {
+/// Timer class is a wrapper around chrono::high_resolution_clock for timing
+/// computations.
+///
+/// Example:
+///     Timer t;
+///     for(size_t i = 0; i < n; i++) {
+///         t.Start() // Start the timer;
+///         compute_intensive_function();
+///         t.Stop() // Stop the timer;
+///     }
+///     // Write the report to stdout
+///     std::cout << t << std::endl;
+///
 class Timer {
    public:
     Timer();
     ~Timer();
 
+    // API Functions
     void Reset();
     void Start();
     void Stop();
     void Restart();
-    std::chrono::duration<double> Elapsed();
+    NanosecondsType Elapsed();
+
+    // Accessors
+    bool running(void) { return running_; }
+    size_t count(void) { return count_; }
 
    private:
-    bool running;
-    size_t count;
-    std::chrono::duration<double> totalTime;
+    bool running_;
+    /// count_ is the number of times the timer was started
+    ///
+    size_t count_;
+    /// totalTime_ is the total duration of time that the timer
+    /// was running.
+    NanosecondsType totalTime_;
 
-    std::chrono::high_resolution_clock::time_point startTime;
-    std::chrono::high_resolution_clock::time_point stopTime;
+    std::chrono::high_resolution_clock::time_point startTime_;
+    std::chrono::high_resolution_clock::time_point stopTime_;
 };
 
-Timer::Timer() : running(false), count(0), totalTime(0) {}
+Timer::Timer() : running_(false), count_(0), totalTime_(0) {}
 
-Timer::~Timer() {
-    if (running) {
-        std::cerr << "Destroying a running timer" << std::endl;
-    }
-}
+Timer::~Timer() {}
 
+/// Reset - resets the timer
+///
 inline void Timer::Reset() {
-    running = false;
-    count = 0;
-    totalTime = std::chrono::duration<double>::zero();
+    running_ = false;
+    count_ = 0;
+    totalTime_ = std::chrono::nanoseconds(0);
 }
 
+/// Start - starts an idle timer.
+///
+/// Throws a std::runtime_error if the timer is already running.
 inline void Timer::Start() {
-    if (running) {
+    if (running_) {
         throw std::runtime_error("Start called on a running timer");
     }
-    startTime = std::chrono::high_resolution_clock::now();
-    running = true;
+    startTime_ = std::chrono::high_resolution_clock::now();
+    running_ = true;
 }
 
+/// Stop - stops a running timer.
+///
+/// Throws a std::runtime_error if the timer is already idle.
 inline void Timer::Stop() {
-    if (!running) {
-        throw std::runtime_error("Stop called on a stopped timer");
+    if (!running_) {
+        throw std::runtime_error("Stop called on an idle timer");
     }
-    stopTime = std::chrono::high_resolution_clock::now();
-    count++;
-    totalTime = stopTime - startTime;
-    running = false;
+    stopTime_ = std::chrono::high_resolution_clock::now();
+    count_++;
+    totalTime_ = stopTime_ - startTime_;
+    running_ = false;
 }
 
-inline std::chrono::duration<double> Timer::Elapsed() { return totalTime; }
+/// Restart is an alias for Stop + Start.
+///
+/// Throws std::runtime_error as per Stop and Stop rules.
+inline void Timer::Restart() {
+    Stop();
+    Start();
+}
+
+/// Elapsed returns the total time the timer was running for in
+/// duration of Nanoseconds.
+inline NanosecondsType Timer::Elapsed() { return totalTime_; }
 }

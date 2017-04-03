@@ -1,15 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] 2017-03-22
+## [Unreleased] 2017-04-03
 ### Added
 
 Shivakar Vulli <svulli@shivakar.com>
 
-* Initial commit of
-	* CMakeLists.txt
-	* examples/CMakeLists.txt
-	* src/CMakeLists.txt
-	* include/timey.hpp
-	* examples/timer.cpp
-	* src/timer.cpp
+* Added Timer class
+* Added test setup using CMake and Google Test

@@ -9,7 +9,7 @@
 
 #include "timey.hpp"
 
-int main(int argc, char *argv[]) {
+int main(void) {
     timey::Timer my_timer;
 
     my_timer.Start();

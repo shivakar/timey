@@ -47,11 +47,11 @@ include_directories (
     ${PROJECT_SOURCE_DIR}/include
     )
 
-# Adding all .cpp files to test executable
-file(GLOB TEST_SRCS_
-    "*.cpp"
-    )
-add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SRCS_})
-target_link_libraries(${CMAKE_PROJECT_NAME}_test ${CMAKE_PROJECT_NAME} gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
-
-add_test(NAME ${CMAKE_PROJECT_NAME}_test COMMAND ${CMAKE_PROJECT_NAME}_test)
+# Create test executables from each .cpp file
+file(GLOB TEST_SRCS_ "*.cpp")
+foreach(file ${TEST_SRCS_})
+    get_filename_component(test_name ${file} NAME_WE)
+    add_executable(${test_name} ${file})
+    target_link_libraries(${test_name} ${CMAKE_PROJECT_NAME} gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endforeach()
