@@ -28,6 +28,7 @@ namespace timey {
 class Timer {
    public:
     Timer();
+    Timer(const std::string name__);
     ~Timer();
 
     // API Functions
@@ -40,6 +41,10 @@ class Timer {
     // Accessors
     bool running(void) { return running_; }
     size_t count(void) { return count_; }
+    std::string name(void) { return name_; }
+
+    // Mutators
+    void name(const std::string name__) { name_ = name__; }
 
    private:
     bool running_;
@@ -49,12 +54,16 @@ class Timer {
     /// totalTime_ is the total duration of time that the timer
     /// was running.
     NanosecondsType totalTime_;
+    std::string name_;
 
     std::chrono::high_resolution_clock::time_point startTime_;
     std::chrono::high_resolution_clock::time_point stopTime_;
 };
 
 Timer::Timer() : running_(false), count_(0), totalTime_(0) {}
+
+Timer::Timer(const std::string name__)
+    : running_(false), count_(0), totalTime_(0), name_(name__) {}
 
 Timer::~Timer() {}
 
@@ -100,5 +109,5 @@ inline void Timer::Restart() {
 
 /// Elapsed returns the total time the timer was running for in
 /// duration of Nanoseconds.
-inline NanosecondsType Timer::Elapsed() { return totalTime_; }
+inline NanosecondsType Timer::Elapsed() { return totalTime_; }                           
 }

@@ -8,6 +8,13 @@ TEST(TimeyTimerTest, Constructor) {
     EXPECT_EQ(t.running(), false);
     EXPECT_EQ(t.Elapsed().count(), 0);
     EXPECT_EQ(t.count(), (size_t)0);
+    EXPECT_EQ(t.name(), "");
+
+    timey::Timer tn("timer1");
+    EXPECT_EQ(tn.running(), false);
+    EXPECT_EQ(tn.Elapsed().count(), 0);
+    EXPECT_EQ(tn.count(), (size_t)0);
+    EXPECT_EQ(tn.name(), "timer1");
 }
 
 TEST(TimeyTimerTest, StartStopElapsedReset) {
