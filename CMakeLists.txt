@@ -8,7 +8,7 @@ option(BUILD_EXAMPLES "Build examples." ON)
 option(BUILD_TESTS "Build tests." ON)
 option(BUILD_DOCUMENTATION "Build and install HTML documentation." ON)
 option(ENABLE_CXX_STRICT "Enable strict compiler rules." OFF)
-option(ENABLE_COVERAGE "Enable code coverage analysis. **Note** Sets current build to DEBUG." ON)
+option(ENABLE_COVERAGE "Enable code coverage analysis. **Note** Sets current build to DEBUG." OFF)
 
 # Prerequisites
 if(BUILD_TESTS)

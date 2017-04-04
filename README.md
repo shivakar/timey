@@ -26,3 +26,12 @@ make test
 sudo make install
 ```
 
+
+To generate coverage report (available at `build/timey_coverage/index.html`):
+
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE ..
+make coverage
+```
