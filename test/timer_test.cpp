@@ -7,7 +7,7 @@ TEST(TimeyTimerTest, Constructor) {
     timey::Timer t;
     EXPECT_EQ(t.running(), false);
     EXPECT_EQ(t.Elapsed().count(), 0);
-    EXPECT_EQ(t.count(), 0);
+    EXPECT_EQ(t.count(), (size_t)0);
 }
 
 TEST(TimeyTimerTest, StartStopElapsedReset) {
@@ -20,13 +20,13 @@ TEST(TimeyTimerTest, StartStopElapsedReset) {
 
     EXPECT_EQ(t.running(), false);
     EXPECT_GT(t.Elapsed(), 10 * timey::Millisecond);
-    EXPECT_NEAR(t.Elapsed().count(), 10e6, 1e6);
-    EXPECT_EQ(t.count(), 1);
+    EXPECT_NEAR(t.Elapsed().count(), 10e6, 5e6);
+    EXPECT_EQ(t.count(), (size_t)1);
 
     t.Reset();
     EXPECT_EQ(t.running(), false);
     EXPECT_EQ(t.Elapsed().count(), 0);
-    EXPECT_EQ(t.count(), 0);
+    EXPECT_EQ(t.count(), (size_t)0);
 }
 
 TEST(TimeyTimerTest, Restart) {
@@ -36,8 +36,8 @@ TEST(TimeyTimerTest, Restart) {
         std::this_thread::sleep_for(timey::Millisecond);
         t.Stop();
     }
-    EXPECT_EQ(t.count(), 10);
-    EXPECT_NEAR(t.Elapsed().count(), 1e6, 2e5);
+    EXPECT_EQ(t.count(), (size_t)10);
+    EXPECT_NEAR(t.Elapsed().count(), 1e6, 5e5);
 
     t.Reset();
     t.Start();
@@ -46,8 +46,8 @@ TEST(TimeyTimerTest, Restart) {
         std::this_thread::sleep_for(timey::Millisecond);
     }
     t.Stop();
-    EXPECT_EQ(t.count(), 11);
-    EXPECT_NEAR(t.Elapsed().count(), 1e6, 2e5);
+    EXPECT_EQ(t.count(), (size_t)11);
+    EXPECT_NEAR(t.Elapsed().count(), 1e6, 5e5);
 }
 
 TEST(TimeyTimerTest, StartStopRestartExceptions) {

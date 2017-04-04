@@ -8,8 +8,6 @@ set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
 set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 set(PROJECT_README ${PROJECT_SOURCE_DIR}/README.md)
 
-message("README location: " ${PROJECT_README})
-
 configure_file(${doxyfile_in} ${doxyfile} @ONLY)
 
 add_custom_target(doc ALL

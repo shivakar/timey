@@ -55,3 +55,33 @@ foreach(file ${TEST_SRCS_})
     target_link_libraries(${test_name} ${CMAKE_PROJECT_NAME} gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
     add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()
+
+if(ENABLE_COVERAGE)
+    set(coverage_info_path "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}_coverage.info")
+    set(coverage_cleaned_path "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}_coverage.cleaned")
+    set(coverage_output_path "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}_coverage")
+    ADD_CUSTOM_TARGET(coverage
+        # Build test executables
+        COMMAND ${CMAKE_COMMAND} --build .
+
+        # Clean any previous lcov outputs
+        COMMAND ${LCOV_PATH} --directory . --zerocounters
+
+        # Run all tests
+        COMMAND ${CMAKE_COMMAND} --build . --target test
+
+        # Capture lcov counters
+        COMMAND ${LCOV_PATH} --directory . --capture --output-file ${coverage_info_path}
+
+        # Remove system and vendor libraries from the coverage report
+        COMMAND ${LCOV_PATH} --remove ${coverage_info_path} 'test/*' '/usr/*' '/opt/local/*' '/opt/apps/*' 'vendor/*' 'gtest/*' ${LCOV_REMOVE_EXTRA} --output-file ${coverage_cleaned_path}
+
+        # Generate report
+        COMMAND ${GENHTML_PATH} -o ${coverage_output_path} ${coverage_cleaned_path}
+
+        # Cleanup
+        COMMAND ${CMAKE_COMMAND} -E remove ${coverage_info_path} ${coverage_cleaned_path}
+
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+endif()
