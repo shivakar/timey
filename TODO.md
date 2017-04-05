@@ -2,7 +2,7 @@
 
 `Timer` functionality:
 
-* Write a fixed format report to an `ostream`.
+* [ x ] Write a fixed format report to an `ostream`.
 
 `TimerSet` functionality:
 

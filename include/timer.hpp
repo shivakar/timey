@@ -5,6 +5,7 @@
 #pragma once
 
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <chrono>
 #include <cstdint>
@@ -36,15 +37,19 @@ class Timer {
     void Start();
     void Stop();
     void Restart();
-    NanosecondsType Elapsed();
+    NanosecondsType Elapsed() const;
+    std::string Report() const;
 
     // Accessors
-    bool running(void) { return running_; }
-    size_t count(void) { return count_; }
-    std::string name(void) { return name_; }
+    bool running(void) const { return running_; }
+    size_t count(void) const { return count_; }
+    std::string name(void) const { return name_; }
 
     // Mutators
     void name(const std::string name__) { name_ = name__; }
+
+    // Friend functions
+    friend std::ostream& operator<<(std::ostream& out, const Timer& t);
 
    private:
     bool running_;
@@ -109,5 +114,32 @@ inline void Timer::Restart() {
 
 /// Elapsed returns the total time the timer was running for in
 /// duration of Nanoseconds.
-inline NanosecondsType Timer::Elapsed() { return totalTime_; }                           
+inline NanosecondsType Timer::Elapsed() const { return totalTime_; }
+
+/// Report returns a std::string report of the timer without the header or
+/// decorations.
+inline std::string Timer::Report() const {
+    using std::setw;
+    using std::left;
+    std::ostringstream out;
+
+    out << setw(15) << left << name_ << setw(15) << count_ << setw(20)
+        << Humanize(totalTime_);
+
+    return out.str();
+}
+
+/// Operator overloading to write a Timer object to std::ostream
+///
+std::ostream& operator<<(std::ostream& out, const Timer& t) {
+    using std::setw;
+    using std::endl;
+    using std::left;
+    out << setw(15) << left << "Timer" << setw(15) << "Count" << setw(20)
+        << "Total" << endl;
+    out << std::string(80, '-') << endl;
+    out << t.Report() << endl;
+    out << std::string(80, '-') << endl;
+    return out;
+}
 }

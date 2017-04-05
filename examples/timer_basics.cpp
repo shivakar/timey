@@ -19,6 +19,7 @@ int main(void) {
 
     std::cout << "Total Elapsed: " << my_timer.Elapsed().count() << "ms"
               << std::endl;
+    std::cout << my_timer << std::endl;
 
     // A named timer
     // The name of the timer will be used when printing the timer
@@ -28,6 +29,7 @@ int main(void) {
     named_timer.Stop();
     std::cout << "Total Elapsed: " << named_timer.Elapsed().count() << "ms"
               << std::endl;
+    std::cout << named_timer << std::endl;
 
     return 0;
 }

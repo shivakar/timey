@@ -1,3 +1,6 @@
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <thread>
 #include "gtest/gtest.h"
 
@@ -64,4 +67,36 @@ TEST(TimeyTimerTest, StartStopRestartExceptions) {
     t.Stop();
     EXPECT_THROW(t.Stop(), std::runtime_error);
     EXPECT_THROW(t.Restart(), std::runtime_error);
+}
+
+TEST(TimeyTimerTest, WriteToStream) {
+    using std::setw;
+    using std::left;
+    using std::endl;
+    timey::Timer t;
+    t.name("My Timer");
+    t.Start();
+    std::this_thread::sleep_for(10 * timey::Millisecond);
+    t.Stop();
+    std::ostringstream actual;
+    actual << t;
+
+    std::ostringstream expected;
+    // Adding the header
+    expected << setw(15) << left << "Timer" << setw(15) << "Count" << setw(20)
+             << "Total" << endl;
+    // Adding decorations and timer report
+    expected << std::string(80, '-') << endl;
+    expected << setw(15) << t.name() << setw(15) << t.count() << setw(20)
+             << timey::Humanize(t.Elapsed()) << endl;
+    expected << std::string(80, '-') << endl;
+
+    EXPECT_EQ(actual.str(), expected.str());
+
+    // Test using t.Report member function
+    expected.clear();
+    expected.str("");
+    expected << setw(15) << t.name() << setw(15) << t.count() << setw(20)
+             << timey::Humanize(t.Elapsed());
+    EXPECT_EQ(t.Report(), expected.str());
 }
