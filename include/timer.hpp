@@ -30,6 +30,7 @@ class Timer {
    public:
     Timer();
     Timer(const std::string name__);
+    Timer(const Timer& t);
     ~Timer();
 
     // API Functions
@@ -41,12 +42,12 @@ class Timer {
     std::string Report() const;
 
     // Accessors
-    bool running(void) const { return running_; }
-    size_t count(void) const { return count_; }
-    std::string name(void) const { return name_; }
+    bool Running(void) const { return running_; }
+    size_t Count(void) const { return count_; }
+    std::string Name(void) const { return name_; }
 
     // Mutators
-    void name(const std::string name__) { name_ = name__; }
+    void Name(const std::string name__) { name_ = name__; }
 
     // Friend functions
     friend std::ostream& operator<<(std::ostream& out, const Timer& t);
@@ -69,6 +70,14 @@ Timer::Timer() : running_(false), count_(0), totalTime_(0) {}
 
 Timer::Timer(const std::string name__)
     : running_(false), count_(0), totalTime_(0), name_(name__) {}
+
+Timer::Timer(const Timer& t)
+    : running_(t.running_),
+      count_(t.count_),
+      totalTime_(t.totalTime_),
+      name_(t.name_),
+      startTime_(t.startTime_),
+      stopTime_(t.stopTime_) {}
 
 Timer::~Timer() {}
 

@@ -4,7 +4,6 @@
 ///
 #include <chrono>
 #include <iostream>
-#include <iostream>
 #include <thread>
 
 #include "timey.hpp"

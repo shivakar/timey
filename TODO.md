@@ -6,7 +6,7 @@
 
 `TimerSet` functionality:
 
-* `Vector` to hold multiple timers by name.
+* [ x ] `Vector` to hold multiple timers by name.
 * Add and delete timers by name.
 * Start, stop and restart a given timer by name.
 * Start, stop and restart all timers.
@@ -19,7 +19,6 @@
 
 * When was the timer last started?
 * When was the timer last stopped?
-* How many times (count) was the timer started (and stopped)?
 * What are the min, max, mean and std. dev. times for the timer?
 * What are the indices of the min and max indices?
 * Keep track of min, max and their indices only if requested.
