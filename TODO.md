@@ -7,9 +7,8 @@
 `TimerSet` functionality:
 
 * [ x ] `Vector` to hold multiple timers by name.
-* Add and delete timers by name.
-* Start, stop and restart a given timer by name.
-* Start, stop and restart all timers.
+* [ x ] Add and [ x ] delete timers by name.
+* [ x ] Start, [ x ] stop and [ x ] restart a given timer by name.
 * Write a fixed format report of all the timers.
 
 
@@ -29,4 +28,5 @@
 
 `TimerSet` functionality:
 
+* Start, stop and restart all timers.
 * Write a fixed format detailed report to an `ostream`.
