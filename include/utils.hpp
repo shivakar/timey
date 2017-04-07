@@ -73,7 +73,7 @@ std::string DoubleToFixedString(const double& d) {
 /// Special cases are:
 ///      0s        = 0s (even though 0ns would still be correct)
 ///
-/// @param dur instance of the std::chrono::duration
+/// @param dur std::chrono::duration
 /// @return std::string
 template <class T1, class T2>
 std::string Humanize(const std::chrono::duration<T1, T2>& dur) {

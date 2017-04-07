@@ -17,6 +17,7 @@ namespace timey {
 /// computations.
 ///
 /// Example:
+/// @code
 ///     Timer t;
 ///     for(size_t i = 0; i < n; i++) {
 ///         t.Start() // Start the timer;
@@ -25,7 +26,7 @@ namespace timey {
 ///     }
 ///     // Write the report to stdout
 ///     std::cout << t << std::endl;
-///
+/// @endcode
 class Timer {
    public:
     Timer();
@@ -42,11 +43,26 @@ class Timer {
     std::string Report() const;
 
     // Accessors
+    /// Running returns true if the Timer is currently running, false otherwise.
+    ///
+    /// @retval TRUE If the timer is running
+    /// @retval False Otherwise
     bool Running(void) const { return running_; }
+
+    /// Count returns the number of times the Timer was started and stopped.
+    ///
+    /// @retval Number of times the Timer was started and stopped.
     size_t Count(void) const { return count_; }
+
+    /// Name returns the name of the Timer.
+    ///
+    /// @retval Name of the Timer
     std::string Name(void) const { return name_; }
 
     // Mutators
+    /// Name sets the name of the timer.
+    ///
+    /// @param [in] name__ Name of the Timer
     void Name(const std::string name__) { name_ = name__; }
 
     // Friend functions
@@ -81,7 +97,7 @@ Timer::Timer(const Timer& t)
 
 Timer::~Timer() {}
 
-/// Reset - resets the timer
+/// Reset resets the timer
 ///
 inline void Timer::Reset() {
     running_ = false;
@@ -89,9 +105,9 @@ inline void Timer::Reset() {
     totalTime_ = std::chrono::nanoseconds(0);
 }
 
-/// Start - starts an idle timer.
+/// Start starts an idle timer.
 ///
-/// Throws a std::runtime_error if the timer is already running.
+/// @throw std::runtime_error if the timer is already running.
 inline void Timer::Start() {
     if (running_) {
         throw std::runtime_error("Start called on a running timer");
@@ -100,9 +116,9 @@ inline void Timer::Start() {
     running_ = true;
 }
 
-/// Stop - stops a running timer.
+/// Stop stops a running timer.
 ///
-/// Throws a std::runtime_error if the timer is already idle.
+/// @throw std::runtime_error if the timer is already idle.
 inline void Timer::Stop() {
     if (!running_) {
         throw std::runtime_error("Stop called on an idle timer");
@@ -115,7 +131,7 @@ inline void Timer::Stop() {
 
 /// Restart is an alias for Stop + Start.
 ///
-/// Throws std::runtime_error as per Stop and Stop rules.
+/// @throw std::runtime_error as per Stop and Stop rules.
 inline void Timer::Restart() {
     Stop();
     Start();
@@ -123,10 +139,14 @@ inline void Timer::Restart() {
 
 /// Elapsed returns the total time the timer was running for in
 /// duration of Nanoseconds.
+///
+/// @retval std::chrono::duration object in Nanoseconds
 inline NanosecondsType Timer::Elapsed() const { return totalTime_; }
 
 /// Report returns a std::string report of the timer without the header or
 /// decorations.
+///
+/// @returns std::string report of the timer
 inline std::string Timer::Report() const {
     using std::setw;
     using std::left;
@@ -140,6 +160,9 @@ inline std::string Timer::Report() const {
 
 /// Operator overloading to write a Timer object to std::ostream
 ///
+/// @param out std::outstream&
+/// @param t const Timer&
+/// @retval Updated std::ostream
 std::ostream& operator<<(std::ostream& out, const Timer& t) {
     using std::setw;
     using std::endl;
