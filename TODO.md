@@ -3,13 +3,16 @@
 `Timer` functionality:
 
 * [ x ] Write a fixed format report to an `ostream`.
+* Add mean time to Timer.
+* Add Std. Dev. time to Timer.
+* Update report to include mean and std. dev.
 
 `TimerSet` functionality:
 
 * [ x ] `Vector` to hold multiple timers by name.
 * [ x ] Add and [ x ] delete timers by name.
 * [ x ] Start, [ x ] stop and [ x ] restart a given timer by name.
-* Write a fixed format report of all the timers.
+* [ x ] Write a fixed format report of all the timers.
 
 
 ## Undecided functionality from proposal

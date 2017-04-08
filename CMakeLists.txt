@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timey)
 set(PROJECT_NAME "timey")
-set(PROJECT_VERSION "0.0.2")
+set(PROJECT_VERSION "0.1.0")
 
 option(BUILD_EXAMPLES "Build examples." ON)
 option(BUILD_TESTS "Build tests." ON)
