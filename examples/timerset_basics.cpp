@@ -44,5 +44,5 @@ int main(void) {
     }
 
     // Print the TimerSet report
-    // std::cout << ts << std::endl;
+     std::cout << ts << std::endl;
 }

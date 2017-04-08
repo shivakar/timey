@@ -7,7 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
-#include <unordered_map>
+#include <map>
 
 #include "utils.hpp"
 #include "timer.hpp"
@@ -50,9 +50,12 @@ class TimerSet {
     void Reset(const std::string& timer_name);
     Timer& Get(const std::string& timer_name);
 
+    // Friend functions
+    friend std::ostream& operator<<(std::ostream& out, const TimerSet& t);
+
    private:
     bool Contains_(const std::string& timer_name) const;
-    std::unordered_map<std::string, Timer> timers_;
+    std::map<std::string, Timer> timers_;
 };
 
 TimerSet::TimerSet() {}
@@ -201,5 +204,27 @@ Timer& TimerSet::Get(const std::string& timer_name) {
         throw std::runtime_error("Invalid Timer '" + timer_name + "'");
     }
     return timers_.find(timer_name)->second;
+}
+
+/// Operator overloading to write a TimerSet object to std::ostream
+///
+/// @param out Output Stream
+/// @param ts TimerSet object
+/// @retVal Updated output stream
+std::ostream& operator<<(std::ostream& out, const TimerSet& ts) {
+    using std::setw;
+    using std::endl;
+    using std::left;
+    out << left;
+
+    // Report header is defined in Timer.hpp
+    out << internal::ReportHeader() << endl;
+    out << std::string(80, '-') << endl;
+    for (auto& t : ts.timers_) {
+        out << t.second.Report() << endl;
+    }
+    out << std::string(80, '-') << endl;
+
+    return out;
 }
 }

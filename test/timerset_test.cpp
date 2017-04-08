@@ -114,3 +114,40 @@ TEST(TimeyTimerSetTest, Reset) {
 
     EXPECT_THROW(ts.Reset("unknown"), std::runtime_error);
 }
+
+TEST(TimeyTimerSetTest, WriteToStream) {
+    timey::TimerSet ts;
+    ts.Add("Timer 1");
+    ts.Add("Timer 2");
+    ts.Add("Timer 3");
+
+    for (int i = 0; i < 10; i++) {
+        ts.Start("Timer 1");
+        std::this_thread::sleep_for(timey::Millisecond);
+        ts.Stop("Timer 1");
+
+        if (i % 2 == 0) {
+            ts.Start("Timer 2");
+            std::this_thread::sleep_for(timey::Millisecond);
+            ts.Stop("Timer 2");
+        } else {
+            ts.Start("Timer 3");
+            std::this_thread::sleep_for(timey::Millisecond);
+            ts.Stop("Timer 3");
+        }
+    }
+
+    std::ostringstream expected;
+    using std::endl;
+    expected << timey::internal::ReportHeader() << endl;
+    expected << std::string(80, '-') << endl;
+    expected << ts.Get("Timer 1").Report() << endl;
+    expected << ts.Get("Timer 2").Report() << endl;
+    expected << ts.Get("Timer 3").Report() << endl;
+    expected << std::string(80, '-') << endl;
+
+    std::ostringstream actual;
+    actual << ts;
+
+    EXPECT_EQ(actual.str(), expected.str());
+}

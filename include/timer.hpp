@@ -13,6 +13,12 @@
 #include "utils.hpp"
 
 namespace timey {
+namespace internal {
+const std::string ReportHeader(void) {
+    return "Timer" + std::string(10, ' ') + "Count" + std::string(10, ' ') +
+           "Total" + std::string(15, ' ');
+}
+}
 /// Timer class is a wrapper around chrono::high_resolution_clock for timing
 /// computations.
 ///
@@ -167,8 +173,7 @@ std::ostream& operator<<(std::ostream& out, const Timer& t) {
     using std::setw;
     using std::endl;
     using std::left;
-    out << setw(15) << left << "Timer" << setw(15) << "Count" << setw(20)
-        << "Total" << endl;
+    out << internal::ReportHeader() << endl;
     out << std::string(80, '-') << endl;
     out << t.Report() << endl;
     out << std::string(80, '-') << endl;

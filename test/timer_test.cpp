@@ -93,6 +93,13 @@ TEST(TimeyTimerTest, StartStopRestartExceptions) {
     EXPECT_THROW(t.Restart(), std::runtime_error);
 }
 
+TEST(TimeyTimerTest, ReportHeader) {
+    std::string expected = "Timer          ";
+    expected += "Count          ";
+    expected += "Total               ";
+    EXPECT_EQ(timey::internal::ReportHeader(), expected);
+}
+
 TEST(TimeyTimerTest, WriteToStream) {
     using std::setw;
     using std::left;
