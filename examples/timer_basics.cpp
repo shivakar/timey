@@ -30,5 +30,17 @@ int main(void) {
               << std::endl;
     std::cout << named_timer << std::endl;
 
+    // Reset a timer
+    named_timer.Reset();
+
+    std::cout << "Running the timer for 10 iterations of 1 Millisecond"
+              << std::endl;
+    for (int i = 0; i < 10; ++i) {
+        named_timer.Start();
+        std::this_thread::sleep_for(timey::Millisecond);
+        named_timer.Stop();
+    }
+    std::cout << named_timer << std::endl;
+
     return 0;
 }

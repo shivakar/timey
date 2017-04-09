@@ -131,7 +131,7 @@ inline void Timer::Stop() {
     }
     stopTime_ = std::chrono::high_resolution_clock::now();
     count_++;
-    totalTime_ = stopTime_ - startTime_;
+    totalTime_ += stopTime_ - startTime_;
     running_ = false;
 }
 
