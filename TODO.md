@@ -4,8 +4,8 @@
 
 * [ x ] Write a fixed format report to an `ostream`.
 * [ x ] Add mean time to Timer.
-* Add Std. Dev. time to Timer.
-* Update report to include [ x ] mean and std. dev.
+* [ x ] Add Std. Dev. time to Timer.
+* [ x ] Update report to include [ x ] mean and [ x ]std. dev.
 
 `TimerSet` functionality:
 
