@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include <thread>
+#include <cmath>
 #include "gtest/gtest.h"
 
 #include "timey.hpp"
@@ -71,6 +72,8 @@ TEST(TimeyTimerTest, LoopElapsed) {
         t.Stop();
     }
     EXPECT_NEAR(t.Elapsed().count(), 10e6, 2e6);
+    EXPECT_NEAR(t.ElapsedMean().count(), 1e6, 2e5);
+    EXPECT_LT(t.ElapsedStdDev().count(), 5e4);
 }
 
 TEST(TimeyTimerTest, Restart) {
@@ -109,6 +112,7 @@ TEST(TimeyTimerTest, ReportHeader) {
     expected += "Count          ";
     expected += "Total               ";
     expected += "Mean                ";
+    expected += "Std. Dev.           ";
     EXPECT_EQ(timey::internal::ReportHeader(), expected);
 }
 
@@ -127,12 +131,14 @@ TEST(TimeyTimerTest, WriteToStream) {
     std::ostringstream expected;
     // Adding the header
     expected << setw(15) << left << "Timer" << setw(15) << "Count" << setw(20)
-             << "Total" << setw(20) << "Mean" << endl;
+             << "Total" << setw(20) << "Mean" << setw(20) << "Std. Dev."
+             << endl;
     // Adding decorations and timer report
     expected << std::string(80, '-') << endl;
     expected << setw(15) << t.Name() << setw(15) << t.Count() << setw(20)
              << timey::Humanize(t.Elapsed()) << setw(20)
-             << timey::Humanize(t.Elapsed() / t.Count()) << endl;
+             << timey::Humanize(t.Elapsed() / t.Count()) << setw(20)
+             << timey::Humanize(t.ElapsedStdDev()) << endl;
     expected << std::string(80, '-') << endl;
 
     EXPECT_EQ(actual.str(), expected.str());
@@ -142,6 +148,7 @@ TEST(TimeyTimerTest, WriteToStream) {
     expected.str("");
     expected << setw(15) << t.Name() << setw(15) << t.Count() << setw(20)
              << timey::Humanize(t.Elapsed()) << setw(20)
-             << timey::Humanize(t.Elapsed() / t.Count());
+             << timey::Humanize(t.Elapsed() / t.Count()) << setw(20)
+             << timey::Humanize(t.ElapsedStdDev());
     EXPECT_EQ(t.Report(), expected.str());
 }

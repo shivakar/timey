@@ -9,14 +9,20 @@
 #include <stdexcept>
 #include <chrono>
 #include <cstdint>
+#include <cmath>
 
 #include "utils.hpp"
 
 namespace timey {
 namespace internal {
+/// ReportHeader returns the standard fixed format header used for reporting
+/// timer and timerset statistics.
+///
+/// @retval std::string Fixed format header string.
 const std::string ReportHeader(void) {
     return "Timer" + std::string(10, ' ') + "Count" + std::string(10, ' ') +
-           "Total" + std::string(15, ' ') + "Mean" + std::string(16, ' ');
+           "Total" + std::string(15, ' ') + "Mean" + std::string(16, ' ') +
+           "Std. Dev." + std::string(11, ' ');
 }
 }
 /// Timer class is a wrapper around chrono::high_resolution_clock for timing
@@ -46,6 +52,8 @@ class Timer {
     void Stop();
     void Restart();
     NanosecondsType Elapsed() const;
+    NanosecondsType ElapsedMean() const;
+    NanosecondsType ElapsedStdDev() const;
     std::string Report() const;
 
     // Accessors
@@ -75,29 +83,57 @@ class Timer {
     friend std::ostream& operator<<(std::ostream& out, const Timer& t);
 
    private:
+    /// name_ is the name of the timer.
+    ///
+    std::string name_;
+    /// running_ indicates whether the timer is idle or running.
     bool running_;
-    /// count_ is the number of times the timer was started
+    /// count_ is the number of times the timer was started.
     ///
     size_t count_;
     /// totalTime_ is the total duration of time that the timer
     /// was running.
     NanosecondsType totalTime_;
-    std::string name_;
-
+    /// sampleMean_ is the estimated sample mean of the durations up to the
+    /// current count.
+    int64_t sampleMean_;
+    /// secondMoment_ is the estimate of secondMoment_ of the durations up to
+    /// the current count.
+    int64_t secondMoment_;
+    /// startTime_ is the latest time_point that timer was started.
+    ///
     std::chrono::high_resolution_clock::time_point startTime_;
+    /// stopTime_ is the latest time_point that timer was stopped.
+    ///
     std::chrono::high_resolution_clock::time_point stopTime_;
+
+    // Temporary variables
+    int64_t x_;
+    int64_t sampleMeanNew_;
 };
 
-Timer::Timer() : running_(false), count_(0), totalTime_(0) {}
+Timer::Timer()
+    : running_(false),
+      count_(0),
+      totalTime_(0),
+      sampleMean_(0),
+      secondMoment_(0) {}
 
 Timer::Timer(const std::string name__)
-    : running_(false), count_(0), totalTime_(0), name_(name__) {}
+    : name_(name__),
+      running_(false),
+      count_(0),
+      totalTime_(0),
+      sampleMean_(0),
+      secondMoment_(0) {}
 
 Timer::Timer(const Timer& t)
-    : running_(t.running_),
+    : name_(t.name_),
+      running_(t.running_),
       count_(t.count_),
       totalTime_(t.totalTime_),
-      name_(t.name_),
+      sampleMean_(t.sampleMean_),
+      secondMoment_(t.secondMoment_),
       startTime_(t.startTime_),
       stopTime_(t.stopTime_) {}
 
@@ -109,6 +145,8 @@ inline void Timer::Reset() {
     running_ = false;
     count_ = 0;
     totalTime_ = std::chrono::nanoseconds(0);
+    sampleMean_ = 0;
+    secondMoment_ = 0;
 }
 
 /// Start starts an idle timer.
@@ -132,6 +170,11 @@ inline void Timer::Stop() {
     stopTime_ = std::chrono::high_resolution_clock::now();
     count_++;
     totalTime_ += stopTime_ - startTime_;
+    x_ = (std::chrono::duration_cast<NanosecondsType>(stopTime_ - startTime_))
+             .count();
+    sampleMeanNew_ = sampleMean_ + ((double)(x_ - sampleMean_) / count_);
+    secondMoment_ += (x_ - sampleMeanNew_) * (x_ - sampleMean_);
+    sampleMean_ = sampleMeanNew_;
     running_ = false;
 }
 
@@ -149,6 +192,22 @@ inline void Timer::Restart() {
 /// @retval std::chrono::duration object in Nanoseconds
 inline NanosecondsType Timer::Elapsed() const { return totalTime_; }
 
+/// ElapsedMean returns the mean time the timer was running per
+/// start-stop cycle in duration of Nanonseconds.
+///
+/// @regval std::chrono::duration object in Nanoseconds
+inline NanosecondsType Timer::ElapsedMean() const {
+    return totalTime_ / count_;
+}
+
+/// ElapsedStdDev returns the sample standard deviation of the time the timer
+/// was running per start-stop cycle in duration of Nanoseconds.
+///
+/// @retval std::chrono::duration object in Nanoseconds
+inline NanosecondsType Timer::ElapsedStdDev() const {
+    return ((int64_t)sqrt((double)secondMoment_ / count_)) * timey::Nanosecond;
+}
+
 /// Report returns a std::string report of the timer without the header or
 /// decorations.
 ///
@@ -158,8 +217,11 @@ inline std::string Timer::Report() const {
     using std::left;
     std::ostringstream out;
 
+    int64_t stddev = sqrt((double)secondMoment_ / count_);
+
     out << setw(15) << left << name_ << setw(15) << count_ << setw(20)
-        << Humanize(totalTime_) << setw(20) << Humanize(totalTime_ / count_);
+        << Humanize(totalTime_) << setw(20) << Humanize(totalTime_ / count_)
+        << setw(20) << Humanize(stddev * timey::Nanosecond);
 
     return out.str();
 }
