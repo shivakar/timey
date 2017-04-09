@@ -44,7 +44,7 @@ endif()
 
 # Set the default installation prefix to /opt/apps/timey/<version>
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /opt/apps/{PROJECT_NAME}/{PROJECT_VERSION})
+    set(CMAKE_INSTALL_PREFIX "/opt/apps/${PROJECT_NAME}/${PROJECT_VERSION}" CACHE PATH "..." FORCE)
 endif()
 
 add_library(${PROJECT_NAME} INTERFACE)
