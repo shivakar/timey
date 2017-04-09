@@ -51,7 +51,7 @@ class TimerSet {
     Timer& Get(const std::string& timer_name);
 
     // Friend functions
-    friend std::ostream& operator<<(std::ostream& out, const TimerSet& t);
+    friend std::ostream& operator<<(std::ostream& out, const TimerSet& ts);
 
    private:
     bool Contains_(const std::string& timer_name) const;
@@ -118,7 +118,7 @@ void TimerSet::Add(const std::string& timer_name) {
 /// @throw std::runtime_error if a timer with the provided name already exists
 /// in the TimerSet
 ///
-/// @param [in] Timer
+/// @param [in] t Timer
 void TimerSet::Add(const Timer& t) {
     if (Contains_(t.Name())) {
         throw std::runtime_error("Duplicate Timer '" + t.Name() + "'");
@@ -208,9 +208,9 @@ Timer& TimerSet::Get(const std::string& timer_name) {
 
 /// Operator overloading to write a TimerSet object to std::ostream
 ///
-/// @param out Output Stream
-/// @param ts TimerSet object
-/// @retVal Updated output stream
+/// @param [in] out Output Stream
+/// @param [in] ts TimerSet object
+/// @retval Updated output stream
 std::ostream& operator<<(std::ostream& out, const TimerSet& ts) {
     using std::setw;
     using std::endl;

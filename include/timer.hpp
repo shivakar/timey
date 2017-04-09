@@ -195,7 +195,7 @@ inline NanosecondsType Timer::Elapsed() const { return totalTime_; }
 /// ElapsedMean returns the mean time the timer was running per
 /// start-stop cycle in duration of Nanonseconds.
 ///
-/// @regval std::chrono::duration object in Nanoseconds
+/// @retval std::chrono::duration object in Nanoseconds
 inline NanosecondsType Timer::ElapsedMean() const {
     return totalTime_ / count_;
 }
