@@ -16,7 +16,7 @@ namespace timey {
 namespace internal {
 const std::string ReportHeader(void) {
     return "Timer" + std::string(10, ' ') + "Count" + std::string(10, ' ') +
-           "Total" + std::string(15, ' ');
+           "Total" + std::string(15, ' ') + "Mean" + std::string(16, ' ');
 }
 }
 /// Timer class is a wrapper around chrono::high_resolution_clock for timing
@@ -159,7 +159,7 @@ inline std::string Timer::Report() const {
     std::ostringstream out;
 
     out << setw(15) << left << name_ << setw(15) << count_ << setw(20)
-        << Humanize(totalTime_);
+        << Humanize(totalTime_) << setw(20) << Humanize(totalTime_ / count_);
 
     return out.str();
 }

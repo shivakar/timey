@@ -104,9 +104,11 @@ TEST(TimeyTimerTest, StartStopRestartExceptions) {
 }
 
 TEST(TimeyTimerTest, ReportHeader) {
-    std::string expected = "Timer          ";
+    std::string expected;
+    expected += "Timer          ";
     expected += "Count          ";
     expected += "Total               ";
+    expected += "Mean                ";
     EXPECT_EQ(timey::internal::ReportHeader(), expected);
 }
 
@@ -125,11 +127,12 @@ TEST(TimeyTimerTest, WriteToStream) {
     std::ostringstream expected;
     // Adding the header
     expected << setw(15) << left << "Timer" << setw(15) << "Count" << setw(20)
-             << "Total" << endl;
+             << "Total" << setw(20) << "Mean" << endl;
     // Adding decorations and timer report
     expected << std::string(80, '-') << endl;
     expected << setw(15) << t.Name() << setw(15) << t.Count() << setw(20)
-             << timey::Humanize(t.Elapsed()) << endl;
+             << timey::Humanize(t.Elapsed()) << setw(20)
+             << timey::Humanize(t.Elapsed() / t.Count()) << endl;
     expected << std::string(80, '-') << endl;
 
     EXPECT_EQ(actual.str(), expected.str());
@@ -138,6 +141,7 @@ TEST(TimeyTimerTest, WriteToStream) {
     expected.clear();
     expected.str("");
     expected << setw(15) << t.Name() << setw(15) << t.Count() << setw(20)
-             << timey::Humanize(t.Elapsed());
+             << timey::Humanize(t.Elapsed()) << setw(20)
+             << timey::Humanize(t.Elapsed() / t.Count());
     EXPECT_EQ(t.Report(), expected.str());
 }
